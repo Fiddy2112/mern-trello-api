@@ -59,7 +59,7 @@ scripts:{
 
 ## Bug
 
-- module : [babel-plugin-module-resolver](https://www.npmjs.com/package/babel-plugin-module-resolver) doesn't work, so i will fix soon!
+- module : [babel-plugin-module-resolver](https://www.npmjs.com/package/babel-plugin-module-resolver) doesn't work, so hope i will fix soon!
 
 ## My website Blog
 
