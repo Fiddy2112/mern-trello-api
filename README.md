@@ -47,6 +47,7 @@ scripts:{
 
 - `doesn't work with .env files`
 
+- Create a `.env` file
 ```bash
     // code environment variables here
     //examples
