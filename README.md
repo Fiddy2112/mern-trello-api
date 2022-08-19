@@ -15,6 +15,8 @@ $ yarn install
 $ yarn start
 ```
 
+##### errors encountered and how to fix them
+
 **file: pakage.json**
 
 ```bash
@@ -40,6 +42,24 @@ scripts:{
     "clean": "npm run remove-build && npm run create-build",
     }
 ```
+
+**file: .env**
+
+- `doesn't work with .env files`
+
+```bash
+    // code environment variables here
+    //examples
+    PORT=3000
+```
+
+## Solution
+
+- **[npm dotenv](https://www.npmjs.com/package/dotenv)**
+
+## Bug
+
+- module : babel-plugin-module-resolver doesn't work, so i will fix soon!
 
 ## My website Blog
 
