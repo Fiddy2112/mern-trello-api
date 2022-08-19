@@ -2,11 +2,15 @@
   "name": "mern-trello-api",
   "version": "1.0.0",
   "description": "APIs for MERN Trello Clone App",
-  "main": "index.js",
+  "main": "src/server.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/server.js"
+    "clean": "rimraf ./build && mkdirp ./build",
+    "build-babel": "babel ./src -d ./build/src",
+    "build": "npm run clean && npm run build-babel",
+    "production": "npm run build && node ./build/src/server.js",
+    "dev": "nodemon --exec ./node_modules/.bin/babel-node ./src/server.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +24,18 @@
   },
   "homepage": "https://github.com/Fiddy2112/mern-trello-api#readme",
   "dependencies": {
+    "@babel/runtime": "^7.18.9",
     "express": "^4.18.1",
     "nodemon": "^2.0.19"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.18.10",
+    "@babel/node": "^7.18.10",
+    "@babel/plugin-transform-runtime": "^7.18.10",
+    "@babel/preset-env": "^7.18.10",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "mkdirp": "^1.0.4",
+    "rimraf": "^3.0.2"
   }
 }
