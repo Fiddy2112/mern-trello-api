@@ -15,6 +15,32 @@ $ yarn install
 $ yarn start
 ```
 
+**file: pakage.json**
+
+```bash
+scripts:{
+    "clean": "rd -rf build && mkdir build",
+    }
+```
+
+- In Windows you should use
+- `rd /s /q dist`
+- rm is available in Linux and Mac.
+
+**So, How to run rm command on windows 10?**
+
+### [Solution](https://stackoverflow.com/questions/41451884/how-to-run-rm-command-on-windows-10/41452647)
+
+**_OR_**
+
+```bash
+scripts:{
+    "remove-build": "rmdir /s /q build",
+    "create-build": "mkdir build",
+    "clean": "npm run remove-build && npm run create-build",
+    }
+```
+
 ## My website Blog
 
 ** Coming soon !! **
