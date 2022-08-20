@@ -2,6 +2,9 @@ import { MongoClient } from "mongodb";
 // Using Node.js `require()`
 // const { MongoClient } = require('mongodb');
 
+//db
+let dbInstance = null;
+
 // environment variables
 import { env } from "./environment.js";
 
@@ -14,26 +17,19 @@ export const connectDB = async () => {
     useUnifiedTopology: true,
     useNewUrlParser: true,
   });
-  try {
-    // Use connect method to connect to the server
-    await client.connect();
-    console.log("Connected successfully to server");
 
-    // List database
-    await listDatabase(client);
-  } catch (e) {
-    console.log("Error connecting to database", e);
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
+  // Use connect method to connect to the server
+  await client.connect();
+  console.log("Connected to MongoDB server");
+
+  // Assign the client to out dbInstance
+  dbInstance = client.db(env.DATABASE_NAME);
 };
 
-const listDatabase = async (client) => {
-  const databasesList = await client.db().admin().listDatabases();
-  console.log(databasesList);
-  console.log("Your databases: ");
-  databasesList.databases.forEach((db) => {
-    console.log(`- ${db.name}`);
-  });
+// Get database Instance
+export const getDB = () => {
+  if (!dbInstance) {
+    throw new Error("Database not connected");
+  }
+  return dbInstance;
 };
