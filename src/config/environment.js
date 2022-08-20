@@ -1,6 +1,7 @@
 import "dotenv/config";
 export const env = {
-  PORT: process.env.PORT,
-  HOST_NAME: process.env.HOST_NAME,
+  APP_PORT: process.env.APP_PORT,
+  APP_HOST: process.env.APP_HOST,
+  DATABASE_NAME: process.env.DATABASE_NAME,
   MONGODB_URL: process.env.MONGODB_URL,
 };
