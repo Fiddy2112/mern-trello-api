@@ -1,7 +1,8 @@
 import express from "express";
 import { connectDB } from "./config/mongodb.js";
 import { env } from "./config/environment.js";
-import { BoardModel } from "./models/board.model.js";
+
+import { apiV1 } from "./routes/v1/index.js";
 
 connectDB()
   .then(() => {
@@ -20,10 +21,11 @@ const bootServer = () => {
   const hostname = env.APP_HOST;
 
   const PORT = env.APP_PORT || 5000;
+  // request.body data
+  app.use(express.json());
 
-  app.get("/test", async (req, res) => {
-    res.send("hello world");
-  });
+  // use api v1
+  app.use("/v1", apiV1);
 
   app.listen(PORT, hostname, () => {
     console.log(`server started on port ${hostname}:${PORT}`);
