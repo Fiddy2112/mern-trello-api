@@ -1,9 +1,22 @@
+import { BoardModel } from "../models/board.model.js";
 import { ColumnModel } from "../models/column.model.js";
 
 const createNew = async (data) => {
   try {
-    const result = await ColumnModel.createNew(data);
-    return result;
+    const newColumn = await ColumnModel.createNew(data);
+
+    const getNewColumn = await ColumnModel.findOneById(
+      newColumn.insertedId.toString()
+    );
+    console.log(getNewColumn);
+
+    // Update column array in board collection
+    await BoardModel.pushColumnOrder(
+      getNewColumn.boardId.toString(),
+      getNewColumn._id.toString()
+    );
+
+    return getNewColumn;
   } catch (e) {
     throw new Error(e);
   }
