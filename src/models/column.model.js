@@ -5,7 +5,7 @@ import { getDB } from "../config/mongodb.js";
 // Define Column Collection
 const columnCollectionName = "columns";
 const columnCollectionSchema = Joi.object({
-  boardId: Joi.string().required(),
+  boardId: Joi.string().required(), // also Objectid when create new
   title: Joi.string().required().min(3).max(20).trim(),
   cardOrder: Joi.array().items(Joi.string()).default([]),
   createAt: Joi.date().timestamp().default(Date.now()),
@@ -19,12 +19,49 @@ const validateSchema = async (data) => {
   });
 };
 
-const createNew = async (data) => {
+const findOneById = async (id) => {
   try {
-    const value = await validateSchema(data);
     const result = await getDB()
       .collection(columnCollectionName)
-      .insertOne(value);
+      .findOne({ _id: ObjectId(id) });
+    return result;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+const createNew = async (data) => {
+  try {
+    const validateValue = await validateSchema(data);
+    const insertValue = {
+      ...validateValue,
+      boardId: ObjectId(validateValue.boardId),
+    };
+    const result = await getDB()
+      .collection(columnCollectionName)
+      .insertOne(insertValue);
+    return result;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+/**
+ *
+ * @param {string} columnId
+ * @param {string} cardId
+ * @returns
+ */
+
+const pushCardOrder = async (columnId, cardId) => {
+  try {
+    const result = await getDB()
+      .collection(columnCollectionName)
+      .findOneAndUpdate(
+        { _id: ObjectId(columnId) },
+        { $push: { cardOrder: cardId } },
+        { returnDocument: "after" }
+      );
     return result;
   } catch (e) {
     throw new Error(e);
@@ -38,7 +75,7 @@ const update = async (id, data) => {
       .findOneAndUpdate(
         { _id: ObjectId(id) },
         { $set: data },
-        { returnOriginal: false }
+        { returnDocument: "after" }
       );
 
     return result.value;
@@ -47,4 +84,10 @@ const update = async (id, data) => {
   }
 };
 
-export const ColumnModel = { createNew, update };
+export const ColumnModel = {
+  columnCollectionName,
+  createNew,
+  update,
+  findOneById,
+  pushCardOrder,
+};
