@@ -2,6 +2,7 @@ import Joi from "joi";
 import { ObjectId } from "mongodb";
 import { getDB } from "../config/mongodb.js";
 import { ColumnModel } from "./column.model.js";
+import { CardModel } from "./card.model.js";
 
 // Define Board Collection
 const boardCollectionName = "boards";
@@ -53,14 +54,13 @@ const pushColumnOrder = async (boardId, columnId) => {
 
 const getFullBoard = async (boardId) => {
   try {
-    console.log(ColumnModel.columnCollectionName);
     const result = await getDB()
       .collection(boardCollectionName)
       .aggregate([
         { $match: { _id: ObjectId(boardId) } },
         {
-          from: ColumnModel.columnCollectionName, // collection name
           $lookup: {
+            from: ColumnModel.columnCollectionName, // collection name
             localField: "_id", // field in the input documents
             foreignField: "boardId", // field in the documents of the "from" collection
             as: "columns", // output array field
@@ -68,7 +68,7 @@ const getFullBoard = async (boardId) => {
         },
         {
           $lookup: {
-            from: "cards", // collection name
+            from: CardModel.cardCollectionName, // collection name
             localField: "_id", // field in the input documents
             foreignField: "boardId", // field in the documents of the "from" collection
             as: "cards", // output array field
@@ -76,6 +76,7 @@ const getFullBoard = async (boardId) => {
         },
       ])
       .toArray();
+    console.log(result);
     // return result;
     return result[0] || {};
   } catch (e) {

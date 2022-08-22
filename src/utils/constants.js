@@ -5,3 +5,8 @@ export const HttpStatusCode = {
   NOT_FOUND: 404,
   INTERNAL_SERVER_ERROR: 500,
 };
+
+export const WHITELIST_DOMAINS = [
+  "http://localhost:3000",
+  "http://localhost:5088",
+];

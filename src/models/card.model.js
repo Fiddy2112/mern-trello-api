@@ -48,6 +48,7 @@ const findOneById = async (id) => {
 };
 
 export const CardModel = {
+  cardCollectionName,
   createNew,
   findOneById,
 };
