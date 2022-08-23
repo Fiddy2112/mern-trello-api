@@ -1,5 +1,6 @@
 import { BoardModel } from "../models/board.model.js";
 import { ColumnModel } from "../models/column.model.js";
+import { CardModel } from "../models/card.model.js";
 
 const createNew = async (data) => {
   try {
@@ -25,9 +26,18 @@ const createNew = async (data) => {
 const update = async (id, data) => {
   try {
     const updateData = { ...data, updatedAt: Date.now() };
-    const result = await ColumnModel.update(id, updateData);
-    return result;
+
+    if (updateData._id) delete updateData._id;
+    if (updateData.cards) delete updateData.cards;
+
+    const updatedColumn = await ColumnModel.update(id, updateData);
+    if (updatedColumn._destroy) {
+      // delete many cards in this column
+      CardModel.deleteCards(updatedColumn.cardOrder);
+    }
+    return updatedColumn;
   } catch (e) {
+    console.log(e);
     throw new Error(e);
   }
 };
