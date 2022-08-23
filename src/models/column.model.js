@@ -1,6 +1,9 @@
 import Joi from "joi";
 import { ObjectId } from "mongodb";
 import { getDB } from "../config/mongodb.js";
+import lodash from "lodash";
+
+const { cloneDeep } = lodash;
 
 // Define Column Collection
 const columnCollectionName = "columns";
@@ -70,10 +73,9 @@ const pushCardOrder = async (columnId, cardId) => {
 
 const update = async (id, data) => {
   try {
-    const updateData = {
-      ...data,
-      boardId: ObjectId(data.boardId),
-    };
+    const updateData = { ...data };
+    if (data.boardId) updateData.boardId = ObjectId(data.boardId);
+
     const result = await getDB()
       .collection(columnCollectionName)
       .findOneAndUpdate(

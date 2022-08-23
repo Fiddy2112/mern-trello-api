@@ -23,8 +23,10 @@ const createNew = async (data) => {
 const update = async (id, data) => {
   try {
     const updateData = { ...data, updatedAt: Date.now() };
-    const result = await CardModel.update(id, updateData);
-    return result;
+    if (updateData._id) delete updateData._id;
+    const updatedCard = await CardModel.update(id, updateData);
+
+    return updatedCard;
   } catch (e) {
     throw new Error(e);
   }
