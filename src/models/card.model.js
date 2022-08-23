@@ -1,6 +1,9 @@
 import Joi from "joi";
 import { getDB } from "../config/mongodb.js";
 import { ObjectId } from "mongodb";
+import lodash from "lodash";
+
+const { cloneDeep } = lodash;
 
 // Define Card Collection
 const cardCollectionName = "cards";
@@ -47,6 +50,25 @@ const findOneById = async (id) => {
   }
 };
 
+const update = async (id, data) => {
+  try {
+    // const updatedData = cloneDeep(data);
+    const updatedData = { ...data };
+    if (data.boardId) updatedData.boardId = ObjectId(data.boardId);
+    if (data.columnId) updatedData.columnId = ObjectId(data.columnId);
+    const result = await getDB()
+      .collection(cardCollectionName)
+      .findOneAndUpdate(
+        { _id: ObjectId(id) },
+        { $set: updatedData },
+        { returnDocument: "after" }
+      );
+    return result;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 /*
  * @param {Array of string card id} ids
  */
@@ -67,4 +89,5 @@ export const CardModel = {
   createNew,
   findOneById,
   deleteCards,
+  update,
 };
